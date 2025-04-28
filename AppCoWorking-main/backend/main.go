@@ -3,23 +3,30 @@ package main
 import (
 	"backend/config"
 	"backend/routes"
+	
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	// Cargar variables de entorno
 	config.LoadEnv()
-	
-	// Conectar a la base de datos
 	config.ConnectDB()
 
-	// Inicializar el router de Gin
 	r := gin.Default()
 
-	// Configurar las rutas
-	routes.SetupRoutes(r)
+	// Configura CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"}, // Permitir solo el origen de tu frontend
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
-	// Iniciar el servidor en el puerto 8080
+	routes.SetupRouter(r)
+
 	r.Run(":8080")
 }

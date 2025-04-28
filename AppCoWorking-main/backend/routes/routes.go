@@ -2,11 +2,11 @@ package routes
 
 import (
 	"backend/controllers"
-
+	//"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(r *gin.Engine) {
+func SetupRouter(r *gin.Engine) {
 	// 🔐 Rutas públicas de autenticación
 	authRoutes := r.Group("/api/auth")
 	{
